@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Web;
 
 namespace CoreService
 {
-    [DataContract]
-    public class InputDriver
+    public class UserContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
     }
 }

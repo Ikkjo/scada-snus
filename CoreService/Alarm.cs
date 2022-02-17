@@ -16,10 +16,10 @@ namespace CoreService
     public class Alarm
     {
         [DataMember]
-        public string alarmMessage { get; set; }
+        public string AlarmMessage { get; set; }
         [DataMember]
-        public AlarmPriority priority { get; set; }
+        public AlarmPriority Priority { get; set; }
         [DataMember]
-        public bool processed { get; set; }
+        public bool Processed { get; set; }
     }
 }

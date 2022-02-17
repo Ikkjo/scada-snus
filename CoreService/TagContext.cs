@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CoreService
 {
-    public class ServiceContext: DbContext
+    public class TagContext: DbContext
     {
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Alarm> Alarms { get; set; }

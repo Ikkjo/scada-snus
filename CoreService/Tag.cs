@@ -18,15 +18,14 @@ namespace CoreService
     [KnownType(typeof(AnalogOutput))]
     [KnownType(typeof(DigitalInput))]
     [KnownType(typeof(DigitalOutput))]
-    public abstract class  Tag
+    public class Tag
     {
 
-        [Key]
         [DataMember]
-        String TagName { get; set; }
+        public String TagName { get; set; }
         [DataMember]
-        String Description { get; set; }
+        public String Description { get; set; }
         [DataMember]
-        String IOAddress { get; set; }
+        public String IOAddress { get; set; }
     }
 }
