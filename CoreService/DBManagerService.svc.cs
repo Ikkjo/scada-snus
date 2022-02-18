@@ -41,8 +41,16 @@ namespace CoreService
             {
                 try
                 {
-                    OutputTag t = (OutputTag) tags[tagName];
+                    using (var db = new TagContext())
+                    {
+                        OutputTag t = (OutputTag)db.Tags.Find(tagName);
+                        t.Value = newOutputValue;
+                        db.SaveChanges();
 
+                        OutputTag oTag = (OutputTag)tags[tagName];
+                        oTag.Value = newOutputValue;
+                    }
+                    return true;
 
                 } catch (System.InvalidCastException e)
                 {
@@ -53,9 +61,20 @@ namespace CoreService
             return false;
         }
 
-        public float GetOutputValue(string tagName)
+        public float? GetOutputValue(string tagName)
         {
-            throw new NotImplementedException();
+            if (DoesTagExist(tagName))
+            {
+                using (var db = new TagContext())
+                {
+                    OutputTag oTag = (OutputTag)db.Tags.Find(tagName);
+
+                    if (oTag != null)
+                        return oTag.Value;
+
+                }
+            }
+            return null;
         }
 
         public string LogIn(string username, string password)
@@ -102,12 +121,36 @@ namespace CoreService
 
         public bool RemoveTag(string tagName)
         {
-            throw new NotImplementedException();
+            if (DoesTagExist(tagName))
+            {
+                using(var db = new TagContext())
+                {
+                    db.Tags.Remove(db.Tags.Find(tagName));
+                    db.SaveChanges();
+                    tags.Remove(tagName);
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         public bool SetScan(string tagName, bool scan)
         {
-            throw new NotImplementedException();
+            if (DoesTagExist(tagName))
+            {
+                using (var db = new TagContext())
+                {
+                    InputTag iTag = (InputTag) db.Tags.Find(tagName);
+                    iTag.ScanActive = scan;
+                    db.SaveChanges();
+
+                    ((InputTag)tags[tagName]).ScanActive = scan;
+
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Private methods
@@ -159,7 +202,15 @@ namespace CoreService
 
         private bool DoesTagExist(string tagName)
         {
-            return tags.ContainsKey(tagName);
+            using (var db = new TagContext())
+            {
+                foreach (Tag t in db.Tags)
+                {
+                    if (t.TagName.Equals(tagName))
+                        return true;
+                }
+            }
+            return false;
         }
 
     }

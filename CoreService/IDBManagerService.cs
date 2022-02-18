@@ -15,7 +15,7 @@ namespace CoreService
         [OperationContract]
         bool ChangeOutputValue(string tagName, float newOutputValue);
         [OperationContract]
-        float GetOutputValue(string tagName);
+        float? GetOutputValue(string tagName);
         [OperationContract]
         bool SetScan(string tagName, bool scan);
         [OperationContract]

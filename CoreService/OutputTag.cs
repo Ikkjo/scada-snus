@@ -11,5 +11,7 @@ namespace CoreService
     {
         [DataMember]
         public float InitialValue { get; set; }
+        [DataMember]
+        public float Value { get; set; }
     }
 }

@@ -20,7 +20,8 @@ namespace CoreService
     [KnownType(typeof(DigitalOutput))]
     public class Tag
     {
-
+        
+        [Key]
         [DataMember]
         public String TagName { get; set; }
         [DataMember]
