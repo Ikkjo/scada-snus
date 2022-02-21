@@ -14,8 +14,6 @@ namespace CoreService
     public class DBManagerService : IDBManagerService
     {
         private static Dictionary<string, User> authenticatedUsers = new Dictionary<string, User>();
-        private static Dictionary<string, Tag> tags = new Dictionary<string, Tag>();
-        private static Dictionary<string, Alarm> alarms = new Dictionary<string, Alarm>();
 
         // Interface methods
 
@@ -27,7 +25,6 @@ namespace CoreService
                 {
                     db.Tags.Add(newTag);
                     db.SaveChanges();
-                    tags.Add(newTag.TagName, newTag);
                     return true;
                 }
             }
@@ -46,9 +43,6 @@ namespace CoreService
                         OutputTag t = (OutputTag)db.Tags.Find(tagName);
                         t.Value = newOutputValue;
                         db.SaveChanges();
-
-                        OutputTag oTag = (OutputTag)tags[tagName];
-                        oTag.Value = newOutputValue;
                     }
                     return true;
 
@@ -79,6 +73,8 @@ namespace CoreService
 
         public string LogIn(string username, string password)
         {
+            addAdminIfNotPresent();
+
             using (var db = new UserContext())
             {
                 foreach (var user in db.Users)
@@ -92,7 +88,7 @@ namespace CoreService
                     }
                 }
             }
-            return "Login failed";
+            return "invalid";
         }
 
         public bool LogOut(string token)
@@ -108,6 +104,7 @@ namespace CoreService
             {
                 try
                 {
+                    user.UserID = db.Users.Count().ToString();
                     db.Users.Add(user);
                     db.SaveChanges();
                 }
@@ -127,7 +124,6 @@ namespace CoreService
                 {
                     db.Tags.Remove(db.Tags.Find(tagName));
                     db.SaveChanges();
-                    tags.Remove(tagName);
                     return true;
                 }
 
@@ -145,8 +141,6 @@ namespace CoreService
                     iTag.ScanActive = scan;
                     db.SaveChanges();
 
-                    ((InputTag)tags[tagName]).ScanActive = scan;
-
                     return true;
                 }
             }
@@ -154,6 +148,28 @@ namespace CoreService
         }
 
         // Private methods
+
+        private void addAdminIfNotPresent()
+        {
+            using (var db = new UserContext())
+            {
+                bool found = false;
+
+                foreach (User u in db.Users)
+                {
+                    if (u.Username == "admin")
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    RegisterUser("admin", "admin");
+                }
+            }
+        }
 
         private static string EncryptData(string valueToEncrypt)
         {

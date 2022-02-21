@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d5710292-2b39-4f61-93ed-477cb081b366" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:60910/DBManagerService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="DBManagerService.xsd" MetadataType="Schema" ID="0d3f04d4-b488-45c0-853d-316171deb69d" SourceId="1" SourceUrl="http://localhost:60910/DBManagerService.svc?xsd=xsd2" />
+    <MetadataFile FileName="DBManagerService1.xsd" MetadataType="Schema" ID="0686638b-8c9e-4440-8fcf-e2234448001f" SourceId="1" SourceUrl="http://localhost:60910/DBManagerService.svc?xsd=xsd1" />
+    <MetadataFile FileName="DBManagerService.disco" MetadataType="Disco" ID="5b034223-f0b8-4ce2-a0a9-7c7fddcd0e65" SourceId="1" SourceUrl="http://localhost:60910/DBManagerService.svc?disco" />
+    <MetadataFile FileName="DBManagerService.wsdl" MetadataType="Wsdl" ID="56043036-1a15-4ad5-8462-895de8b5793f" SourceId="1" SourceUrl="http://localhost:60910/DBManagerService.svc?wsdl" />
+    <MetadataFile FileName="DBManagerService2.xsd" MetadataType="Schema" ID="67ac334c-9ad2-447c-9d25-fe523fd94513" SourceId="1" SourceUrl="http://localhost:60910/DBManagerService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
