@@ -78,9 +78,10 @@ namespace DatabaseManager
         private static string LogIn()
         {
             LoginCredentials lc = getLoginCredentials();
-            string token = proxy.LogIn(lc.Username, lc.Password);
-            return token;
+            return proxy.LogIn(lc.Username, lc.Password);
         }
+
+        // refactor posle ovoga
 
         private static void AddTag()
         {
@@ -92,11 +93,17 @@ namespace DatabaseManager
             newTag = GetTagFromUserInput(tagType);
 
             bool successful = proxy.AddTag(newTag);
+
+            PrintResultMessage("Dodavanje novog taga", successful);
         }
 
         private static void RemoveTag()
         {
-
+            System.Console.Clear();
+            System.Console.Write("Unesite ime taga za brisanje: ");
+            string tagName = System.Console.ReadLine();
+            bool succ = proxy.RemoveTag(tagName);
+            PrintResultMessage("Uklanjanje taga", succ);
         }
 
         private static void ChangeOutputTagValue()
@@ -106,17 +113,36 @@ namespace DatabaseManager
 
         private static void GetOutputTagValue()
         {
-
+            System.Console.Clear();
+            System.Console.Write("Unesite ime taga: ");
+            string tagName = System.Console.ReadLine();
+            float? result = proxy.GetOutputValue(tagName);
+            if (result != null)
+            {
+                System.Console.WriteLine($"Vrednost traženog izlaznog taga je: {result}");
+            } else
+            {
+                System.Console.WriteLine("Greška. Traženi izlazni tag nije pronađen");
+            }
+            System.Console.ReadKey();
         }
 
         private static void EnableScan()
         {
-
+            System.Console.Clear();
+            System.Console.Write("Unesite ime taga: ");
+            string tagName = System.Console.ReadLine();
+            bool succ = proxy.SetScan(tagName, true);
+            PrintResultMessage("Uključenje skeniranje taga", succ);
         }
 
         private static void DisableScan()
         {
-
+            System.Console.Clear();
+            System.Console.Write("Unesite ime taga: ");
+            string tagName = System.Console.ReadLine();
+            bool succ = proxy.SetScan(tagName, false);
+            PrintResultMessage("Isključenje skeniranje taga", succ);
         }
 
         private static void RegisterUser()
@@ -127,6 +153,15 @@ namespace DatabaseManager
         private static void LogOut()
         {
             proxy.LogOut(token);
+        }
+
+        private static void PrintResultMessage(string message, bool success)
+        {
+            string succ = success ? "uspešno" : "neuspešno";
+            System.Console.WriteLine($"{message}: {succ}");
+            System.Console.WriteLine("Pritisnite taster za nastavak...");
+            System.Console.ReadKey();
+
         }
 
         private static LoginCredentials getLoginCredentials()
@@ -166,6 +201,7 @@ namespace DatabaseManager
 
         private static void PrintTagTypeMenu()
         {
+            System.Console.Clear();
             System.Console.WriteLine("\n=====================\n=====================\n=====================\n");
             System.Console.WriteLine("Odaberi vrstu taga:\n\n");
             System.Console.WriteLine("  1. Analog input tag\n");
@@ -177,6 +213,8 @@ namespace DatabaseManager
 
         private static DBManagerServiceReference.Tag GetTagFromUserInput(string tagType)
         {
+            System.Console.Clear();
+
             switch (tagType)
             {
                 case "1":
@@ -194,9 +232,87 @@ namespace DatabaseManager
                 default:
                     return null;
             }
+        }
 
+        private static DBManagerServiceReference.Tag GetAITagFromUserInput()
+        {
+            DBManagerServiceReference.AnalogInput newTag = new DBManagerServiceReference.AnalogInput();
+            newTag.TagName = GetTagNameFromUser();
+            newTag.Description = GetTagDataFromUser("opis taga");
+            newTag.IOAddress = GetTagDataFromUser("I/O adresa");
+            newTag.Driver = GetInputDriverFromUser();
+            newTag.ScanTime = int.Parse(GetTagDataFromUser("vreme skeniranja"));
+            newTag.LowLimit = float.Parse(GetTagDataFromUser("donja granica"));
+            newTag.HighLimit = float.Parse(GetTagDataFromUser("gornja granica"));
+            newTag.Units = GetTagDataFromUser("merna jedinica");
+            newTag.ScanActive = false;
+            newTag.Alarms = new List<DBManagerServiceReference.Alarm>().ToArray();
+            return newTag;
+        }
 
-            return null;
+        private static DBManagerServiceReference.Tag GetDITagFromUserInput()
+        {
+
+            DBManagerServiceReference.DigitalInput newTag = new DBManagerServiceReference.DigitalInput();
+            newTag.TagName = GetTagNameFromUser();
+            newTag.Description = GetTagDataFromUser("opis taga");
+            newTag.IOAddress = GetTagDataFromUser("I/O adresa");
+            newTag.Driver = GetInputDriverFromUser();
+            newTag.ScanTime = int.Parse(GetTagDataFromUser("vreme skeniranja"));
+            newTag.ScanActive = false;
+            return newTag;
+        }
+
+        private static DBManagerServiceReference.Tag GetAOTagFromUserInput()
+        {
+
+            DBManagerServiceReference.AnalogOutput newTag = new DBManagerServiceReference.AnalogOutput();
+            newTag.TagName = GetTagNameFromUser();
+            newTag.Description = GetTagDataFromUser("opis taga");
+            newTag.IOAddress = GetTagDataFromUser("I/O adresa");
+            newTag.InitialValue = float.Parse(GetTagDataFromUser("inicijalna vrednost"));
+            newTag.Value = newTag.InitialValue;
+            newTag.LowLimit = float.Parse(GetTagDataFromUser("donja granica"));
+            newTag.HighLimit = float.Parse(GetTagDataFromUser("gornja granica"));
+            newTag.Units = GetTagDataFromUser("merna jedinica");
+            return newTag;
+        }
+
+        private static DBManagerServiceReference.Tag GetDOTagFromUserInput()
+        {
+            DBManagerServiceReference.DigitalOutput newTag = new DBManagerServiceReference.DigitalOutput();
+            newTag.TagName = GetTagNameFromUser();
+            newTag.Description = GetTagDataFromUser("opis taga");
+            newTag.IOAddress = GetTagDataFromUser("I/O adresa");
+            newTag.InitialValue = float.Parse(GetTagDataFromUser("inicijalna vrednost"));
+            newTag.Value = newTag.InitialValue;
+            return newTag;
+        }
+
+        private static string GetTagNameFromUser()
+        {
+            System.Console.WriteLine("Unesi tag name (ne sme biti prazno i mora biti jedinstveno):");
+            return System.Console.ReadLine();
+        }
+
+        private static string GetTagDataFromUser(string description)
+        {
+            System.Console.WriteLine($"Unesi {description}:");
+            string data = System.Console.ReadLine();
+
+            return data == "" ? null : data;
+        }
+
+        private static string GetTagDescriptionFromUser()
+        {
+            System.Console.WriteLine("Unesi opis taga:");
+            return System.Console.ReadLine();
+        }
+
+        private static DBManagerServiceReference.InputDriver GetInputDriverFromUser()
+        {
+
+            return new DBManagerServiceReference.InputDriver();
         }
 
         private static string EncryptData(string valueToEncrypt)
