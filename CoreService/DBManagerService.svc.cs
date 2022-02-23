@@ -19,56 +19,17 @@ namespace CoreService
 
         public bool AddTag(Tag newTag)
         {
-            if(!DoesTagExist(newTag.TagName))
-            {
-                using (var db = new TagContext())
-                {
-                    db.Tags.Add(newTag);
-                    db.SaveChanges();
-                    return true;
-                }
-            }
-            return false;
-            
+            return TagProcessing.AddTag(newTag);
         }
 
         public bool ChangeOutputValue(string tagName, float newOutputValue)
         {
-            if(DoesTagExist(tagName))
-            {
-                try
-                {
-                    using (var db = new TagContext())
-                    {
-                        OutputTag t = (OutputTag)db.Tags.Find(tagName);
-                        t.Value = newOutputValue;
-                        db.SaveChanges();
-                    }
-                    return true;
-
-                } catch (System.InvalidCastException e)
-                {
-                    return false;
-                }                
-                
-            }
-            return false;
+            return TagProcessing.ChangeOutputValue(tagName, newOutputValue);
         }
 
         public float? GetOutputValue(string tagName)
         {
-            if (DoesTagExist(tagName))
-            {
-                using (var db = new TagContext())
-                {
-                    OutputTag oTag = (OutputTag)db.Tags.Find(tagName);
-
-                    if (oTag != null)
-                        return oTag.Value;
-
-                }
-            }
-            return null;
+            return TagProcessing.GetOutputValue(tagName);
         }
 
         public string LogIn(string username, string password)
@@ -98,6 +59,11 @@ namespace CoreService
 
         public bool RegisterUser(string username, string password)
         {
+            if (DoesUserExist(username))
+            {
+                return false;
+            } 
+
             string encryptedPassword = EncryptData(password);
             User user = new User(username, encryptedPassword);
             using (var db = new UserContext())
@@ -118,37 +84,31 @@ namespace CoreService
 
         public bool RemoveTag(string tagName)
         {
-            if (DoesTagExist(tagName))
-            {
-                using(var db = new TagContext())
-                {
-                    db.Tags.Remove(db.Tags.Find(tagName));
-                    db.SaveChanges();
-                    return true;
-                }
-
-            }
-            return false;
+            return TagProcessing.RemoveTag(tagName);
         }
 
         public bool SetScan(string tagName, bool scan)
         {
-            if (DoesTagExist(tagName))
-            {
-                using (var db = new TagContext())
-                {
-                    InputTag iTag = (InputTag) db.Tags.Find(tagName);
-                    iTag.ScanActive = scan;
-                    db.SaveChanges();
-
-                    return true;
-                }
-            }
-            return false;
+            return TagProcessing.SetScan(tagName, scan);
         }
 
         // Private methods
 
+        private bool DoesUserExist(string username)
+        {
+            using (var db = new UserContext())
+            {
+                foreach (User u in db.Users) 
+                {
+                    if (u.Username == username)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
         private void addAdminIfNotPresent()
         {
             using (var db = new UserContext())
@@ -216,18 +176,6 @@ namespace CoreService
             return username + randStr;
         }
 
-        private bool DoesTagExist(string tagName)
-        {
-            using (var db = new TagContext())
-            {
-                foreach (Tag t in db.Tags)
-                {
-                    if (t.TagName.Equals(tagName))
-                        return true;
-                }
-            }
-            return false;
-        }
 
     }
 }

@@ -9,6 +9,7 @@ namespace CoreService
     public class TagContext: DbContext
     {
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<Alarm> Alarms { get; set; }
+        public DbSet<AlarmLog> Alarms { get; set; }
+        public DbSet<TagValue> TagValues { get; set; }
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e53b4d1b-8b4c-48af-b2c2-3e490e08a8ab" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:60910/TrendingService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TrendingService.xsd" MetadataType="Schema" ID="bffcb51d-02ab-4b72-b3f7-60616e846e7e" SourceId="1" SourceUrl="http://localhost:60910/TrendingService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TrendingService.disco" MetadataType="Disco" ID="4a6936b8-6265-4382-be6e-63006fa5a8af" SourceId="1" SourceUrl="http://localhost:60910/TrendingService.svc?disco" />
+    <MetadataFile FileName="TrendingService1.xsd" MetadataType="Schema" ID="6dd736da-ae7d-4fa6-9fa2-346cfb833c81" SourceId="1" SourceUrl="http://localhost:60910/TrendingService.svc?xsd=xsd0" />
+    <MetadataFile FileName="TrendingService.wsdl" MetadataType="Wsdl" ID="ba3401ca-22f4-4f8d-b878-529da48a7dce" SourceId="1" SourceUrl="http://localhost:60910/TrendingService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

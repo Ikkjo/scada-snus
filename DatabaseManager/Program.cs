@@ -100,22 +100,38 @@ namespace DatabaseManager
         private static void RemoveTag()
         {
             System.Console.Clear();
-            System.Console.Write("Unesite ime taga za brisanje: ");
-            string tagName = System.Console.ReadLine();
+            System.Console.WriteLine("Brisanje taga\n\n");
+            string tagName = GetTagNameFromUser();
             bool succ = proxy.RemoveTag(tagName);
             PrintResultMessage("Uklanjanje taga", succ);
         }
 
         private static void ChangeOutputTagValue()
         {
+            System.Console.Clear();
+            System.Console.WriteLine("Promena vrednosti izlaznog taga\n\n");
+            string tagName = GetTagNameFromUser();
+            float? currVal = proxy.GetOutputValue(tagName);
 
+            if (currVal == null)
+            {
+                System.Console.WriteLine($"\n\nTag {tagName} ne postoji! (ili je izabran tag koji nije output tag)...");
+                System.Console.ReadKey();
+                return;
+            }
+
+            System.Console.WriteLine($"\nTrenutna vrednost izlaznog taga je: {currVal}");
+            System.Console.Write("Unesite novu vrednost taga: ");
+            float newVal = float.Parse(System.Console.ReadLine());
+            bool succ = proxy.ChangeOutputValue(tagName, newVal);
+            PrintResultMessage($"Promena vrednosti izlaznog taga {tagName}", succ);
         }
 
         private static void GetOutputTagValue()
         {
             System.Console.Clear();
-            System.Console.Write("Unesite ime taga: ");
-            string tagName = System.Console.ReadLine();
+            System.Console.WriteLine("Ispis vrednosti izlaznog taga\n\n");
+            string tagName = GetTagNameFromUser();
             float? result = proxy.GetOutputValue(tagName);
             if (result != null)
             {
@@ -130,8 +146,8 @@ namespace DatabaseManager
         private static void EnableScan()
         {
             System.Console.Clear();
-            System.Console.Write("Unesite ime taga: ");
-            string tagName = System.Console.ReadLine();
+            System.Console.WriteLine("Uključenje skeniranja ulaznog taga\n\n");
+            string tagName = GetTagNameFromUser();
             bool succ = proxy.SetScan(tagName, true);
             PrintResultMessage("Uključenje skeniranje taga", succ);
         }
@@ -139,15 +155,20 @@ namespace DatabaseManager
         private static void DisableScan()
         {
             System.Console.Clear();
-            System.Console.Write("Unesite ime taga: ");
-            string tagName = System.Console.ReadLine();
+            System.Console.WriteLine("Isključenje skeniranja ulaznog taga\n\n");
+            string tagName = GetTagNameFromUser();
             bool succ = proxy.SetScan(tagName, false);
             PrintResultMessage("Isključenje skeniranje taga", succ);
         }
 
         private static void RegisterUser()
         {
-
+            System.Console.Clear();
+            System.Console.WriteLine("Registrovanje novog korisnika\n\n");
+            string username = GetUsernameFromUser();
+            string password = GetPasswordFromUser();
+            bool succ = proxy.RegisterUser(username, password);
+            PrintResultMessage("Registrovanje novog korisnika", succ);
         }
 
         private static void LogOut()
@@ -158,7 +179,7 @@ namespace DatabaseManager
         private static void PrintResultMessage(string message, bool success)
         {
             string succ = success ? "uspešno" : "neuspešno";
-            System.Console.WriteLine($"{message}: {succ}");
+            System.Console.WriteLine($"\n\n{message}: {succ}");
             System.Console.WriteLine("Pritisnite taster za nastavak...");
             System.Console.ReadKey();
 
@@ -167,7 +188,7 @@ namespace DatabaseManager
         private static LoginCredentials getLoginCredentials()
         {
             PrintLoginMenu();
-            return new LoginCredentials(getUsername(), getPassword());
+            return new LoginCredentials(GetUsernameFromUser(), GetPasswordFromUser());
         }
 
         private static string GetUserChoice()
@@ -257,7 +278,7 @@ namespace DatabaseManager
             newTag.TagName = GetTagNameFromUser();
             newTag.Description = GetTagDataFromUser("opis taga");
             newTag.IOAddress = GetTagDataFromUser("I/O adresa");
-            newTag.Driver = GetInputDriverFromUser();
+            newTag.Driver = GetTagDataFromUser("Driver (SimulationDriver/RealTimeDriver");
             newTag.ScanTime = int.Parse(GetTagDataFromUser("vreme skeniranja"));
             newTag.ScanActive = false;
             return newTag;
@@ -291,7 +312,7 @@ namespace DatabaseManager
 
         private static string GetTagNameFromUser()
         {
-            System.Console.WriteLine("Unesi tag name (ne sme biti prazno i mora biti jedinstveno):");
+            System.Console.WriteLine("Unesi ime taga:");
             return System.Console.ReadLine();
         }
 
@@ -337,7 +358,7 @@ namespace DatabaseManager
             return EncryptValue(valueToEncrypt);
         }
 
-        private static string getUsername()
+        private static string GetUsernameFromUser()
         {
             string username = "";
             System.Console.Write("Upiši korisničko ime: ");
@@ -345,7 +366,7 @@ namespace DatabaseManager
             return username;
         }
 
-        private static string getPassword()
+        private static string GetPasswordFromUser()
         {
             string password = "";
             Console.Write("Upiši lozinku: ");

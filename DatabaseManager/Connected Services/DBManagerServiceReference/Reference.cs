@@ -105,7 +105,7 @@ namespace DatabaseManager.DBManagerServiceReference {
     public partial class InputTag : DatabaseManager.DBManagerServiceReference.Tag {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DatabaseManager.DBManagerServiceReference.InputDriver DriverField;
+        private string DriverField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ScanActiveField;
@@ -114,7 +114,7 @@ namespace DatabaseManager.DBManagerServiceReference {
         private int ScanTimeField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DatabaseManager.DBManagerServiceReference.InputDriver Driver {
+        public string Driver {
             get {
                 return this.DriverField;
             }

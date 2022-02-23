@@ -10,7 +10,7 @@ namespace CoreService
     public abstract class InputTag: Tag
     {
         [DataMember]
-        public InputDriver Driver { get; set; }
+        public string Driver { get; set; }
         [DataMember]
         public int ScanTime { get; set; }
         [DataMember]
